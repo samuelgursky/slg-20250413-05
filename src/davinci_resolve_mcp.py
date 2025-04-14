@@ -251,14 +251,30 @@ def run_server():
         logger.warning(f"Error loading tools: {str(e)}")
         logger.warning("The server will start, but tools may not be available until DaVinci Resolve is running.")
     
-    try:
-        # Run the MCP server
-        proxy_mcp.run()
-    except Exception as e:
-        logger.error(f"Error running MCP server: {str(e)}")
-        import traceback
-        logger.error(traceback.format_exc())
-        sys.exit(1)
+    # Set up a signal handler for graceful shutdown
+    import signal
+    def signal_handler(sig, frame):
+        logger.info("Received signal to shut down MCP server")
+        sys.exit(0)
+        
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    # Run the MCP server
+    logger.info("Starting MCP server...")
+    
+    while True:
+        try:
+            proxy_mcp.run()
+        except Exception as e:
+            if "client closed" in str(e).lower():
+                logger.info("Client connection closed, restarting server...")
+                continue
+            else:
+                logger.error(f"Error running MCP server: {str(e)}")
+                import traceback
+                logger.error(traceback.format_exc())
+                sys.exit(1)
 
 if __name__ == "__main__":
     run_server() 

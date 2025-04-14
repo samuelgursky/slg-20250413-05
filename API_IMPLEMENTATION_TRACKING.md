@@ -319,8 +319,8 @@ These helper functions are needed to properly implement various components in th
 | SetName | set_timeline_name | ✅ Implemented | ✅ Works | Successfully changes timeline name |
 | GetStartFrame | get_timeline_details | ✅ | ✅ | Part of timeline details |
 | GetEndFrame | get_timeline_details | ✅ | ✅ | Part of timeline details |
-| SetStartTimecode | set_start_timecode | ✅ Implemented | ❌ Not tested | Newly implemented |
 | GetStartTimecode | get_timeline_details | ✅ | ✅ | Part of timeline details |
+| SetStartTimecode | set_start_timecode | ✅ Implemented | ✅ Tested | Successfully sets the start timecode of a timeline |
 | GetTrackCount | get_timeline_tracks | ✅ | ✅ | Part of tracks data |
 | AddTrack | add_track | ✅ Implemented | ✅ Works | Function works correctly |
 | DeleteTrack | delete_track | ✅ Implemented | ✅ Works | Function works correctly |
@@ -330,8 +330,8 @@ These helper functions are needed to properly implement various components in th
 | SetTrackLock | set_track_lock | ✅ Implemented | ✅ Works | Successfully locks/unlocks tracks |
 | GetIsTrackLocked | get_timeline_tracks | ✅ | ✅ | Part of tracks data |
 | DeleteClips | delete_timeline_clips | ✅ Implemented | ✅ Works | Function works correctly |
-| SetClipsLinked | set_clips_linked | ✅ Implemented | ❌ Not tested | Newly implemented |
-| GetItemListInTrack | get_timeline_items | ✅ | ✅ | Tested but has issues: can fail with "'NoneType' object is not callable" after clips are added |
+| SetClipsLinked | set_clips_linked | ✅ Implemented | ❌ Tested | Function appears correct but fails with "Could not find any of the specified timeline items" - depends on get_timeline_items which has issues |
+| GetItemListInTrack | get_timeline_items | ✅ | ✅ | Tested but has issues: can fail with "'NoneType' object is not callable" after clips are added or fail to return recently added items |
 | AddMarker | add_marker | ✅ Implemented | ❌ Fails | Having issues - not working with valid frame IDs |
 | GetMarkers | get_markers | ✅ Implemented | ✅ Works | Returns empty marker list correctly |
 | GetMarkerByCustomData | get_marker_by_custom_data | ✅ Implemented | ❌ | Dependent on AddMarker |
@@ -342,14 +342,14 @@ These helper functions are needed to properly implement various components in th
 | DeleteMarkerByCustomData | delete_marker_by_custom_data | ✅ Implemented | ❌ | Dependent on AddMarker |
 | GetCurrentTimecode | get_current_timecode | ✅ Implemented | ✅ Works | Successfully retrieves current timecode |
 | SetCurrentTimecode | set_current_timecode | ✅ Implemented | ✅ Works | Function works correctly |
-| GetCurrentVideoItem | get_current_video_item | ✅ Implemented | ❌ Not tested | Newly implemented |
-| GetCurrentClipThumbnailImage | get_current_clip_thumbnail_image | ✅ Implemented | ❌ Not tested | Newly implemented |
+| GetCurrentVideoItem | get_current_video_item | ✅ Implemented | ❌ Tested | Testing revealed error: "Error getting current video item details: 'NoneType' object is not callable" |
+| GetCurrentClipThumbnailImage | get_current_clip_thumbnail_image | ✅ Implemented | ❌ Tested | Testing revealed error: "Failed to get thumbnail for the current clip" |
 | GetTrackName | get_track_name | ✅ Implemented | ✅ Works | Successfully retrieves track name |
 | SetTrackName | set_track_name | ✅ Implemented | ✅ Works | Successfully changes track name |
 | DuplicateTimeline | duplicate_timeline | ✅ Implemented | ✅ Works | Successfully duplicates timeline with new name |
 | CreateCompoundClip | create_compound_clip | ✅ Implemented | ✅ Tested | Requires timeline items to test, validates input parameters |
-| CreateFusionClip | create_fusion_clip | ✅ Implemented | ❌ Not tested | Newly implemented |
-| ImportIntoTimeline | import_into_timeline | ✅ Implemented | ❌ Not tested | Newly implemented |
+| CreateFusionClip | create_fusion_clip | ✅ Implemented | ❌ Tested | Function appears correct but fails with "Could not find any of the specified timeline items" - depends on timeline item identification |
+| ImportIntoTimeline | import_into_timeline | ✅ Implemented | ❌ Tested | File validation works but fails to import supported formats - needs better error handling and format validation |
 | Export | export_timeline | ✅ Implemented | ✅ Works | Successfully exports timeline to specified format |
 | GetSetting | get_timeline_setting | ✅ Implemented | ✅ Works | Successfully retrieves timeline settings |
 | SetSetting | set_timeline_setting | ✅ Implemented | ✅ Works | Successfully sets timeline settings |
@@ -360,7 +360,7 @@ These helper functions are needed to properly implement various components in th
 | InsertTitleIntoTimeline | insert_title_into_timeline | ✅ Implemented | ✅ Works | Successfully inserts title into timeline |
 | InsertFusionTitleIntoTimeline | insert_fusion_title_into_timeline | ✅ Implemented | ✅ Works | Successfully inserts Fusion title |
 | GrabStill | grab_still | ✅ Implemented | ✅ Works | Successfully grabs still from timeline |
-| GrabAllStills | grab_all_stills | ✅ Implemented | ❌ Not tested | Could not test without proper parameters |
+| GrabAllStills | grab_all_stills | ✅ Implemented | ✅ Tested | Successfully grabs stills from all timeline items |
 
 ## TimelineItem Component (61/61 - 100%)
 
@@ -453,29 +453,29 @@ These helper functions are needed to properly implement various components in th
 
 ## Graph Component
 
-| API Function | Tool Name | Status | Tested | Notes |
-|--------------|-----------|--------|--------|-------|
-| GetNumNodes | get_num_nodes | ✅ Implemented | ❌ Not tested | |
-| SetLUT | set_lut | ✅ Implemented | ❌ Not tested | |
-| GetLUT | get_lut | ✅ Implemented | ❌ Not tested | |
-| SetNodeCacheMode | set_node_cache_mode | ✅ Implemented | ❌ Not tested | |
-| GetNodeCacheMode | get_node_cache_mode | ✅ Implemented | ❌ Not tested | |
-| GetNodeLabel | get_node_label | ✅ Implemented | ❌ Not tested | |
-| GetToolsInNode | get_tools_in_node | ✅ Implemented | ❌ Not tested | |
-| SetNodeEnabled | set_node_enabled | ✅ Implemented | ❌ Not tested | |
-| ApplyGradeFromDRX | apply_grade_from_drx | ✅ Implemented | ❌ Not tested | |
-| ApplyArriCdlLut | apply_arri_cdl_lut | ✅ Implemented | ❌ Not tested | |
-| ResetAllGrades | reset_all_grades | ✅ Implemented | ❌ Not tested | |
+| API Function | Implemented | Tested | Working | Notes |
+|--------------|-------------|--------|---------|-------|
+| GetNumNodes | ✅ | ✅ | ✅ | Successfully retrieves number of nodes in the current graph |
+| SetLUT | ✅ | ✅ | ✅ | Successfully sets LUT for a specific node with proper validation |
+| GetLUT | ✅ | ✅ | ✅ | Successfully retrieves LUT information with proper validation |
+| SetNodeCacheMode | ✅ | ✅ | ✅ | Sets cache mode with validation of mode types ("auto", "on", "off") |
+| GetNodeCacheMode | ✅ | ✅ | ✅ | Retrieves cache mode with proper node validation |
+| GetNodeLabel | ✅ | ✅ | ✅ | Retrieves node label with proper validation |
+| GetToolsInNode | ✅ | ✅ | ✅ | Returns list of tools in a node with count information |
+| SetNodeEnabled | ✅ | ✅ | ✅ | Successfully enables/disables nodes with validation |
+| ApplyGradeFromDRX | ✅ | ✅ | ✅ | Applies grade from DRX file with proper file validation |
+| ApplyArriCdlLut | ✅ | ✅ | ✅ | Applies ARRI CDL LUT with proper file validation |
+| ResetAllGrades | ✅ | ✅ | ✅ | Successfully resets all grades in the current graph |
 
 ## ColorGroup Component
 
-| API Function | Tool Name | Status | Tested | Notes |
-|--------------|-----------|--------|--------|-------|
-| GetName | get_color_group_name | ✅ Implemented | ❌ Not tested | |
-| SetName | set_color_group_name | ✅ Implemented | ❌ Not tested | |
-| GetClipsInTimeline | get_color_group_clips_in_timeline | ✅ Implemented | ❌ Not tested | |
-| GetPreClipNodeGraph | get_color_group_pre_clip_node_graph | ✅ Implemented | ❌ Not tested | |
-| GetPostClipNodeGraph | get_color_group_post_clip_node_graph | ✅ Implemented | ❌ Not tested | |
+| API Function | Implemented | Tested | Working | Notes |
+|-------------|------------|--------|---------|-------|
+| GetName | ✅ | ✅ | ✅ | |
+| SetName | ✅ | ✅ | ✅ | |
+| GetClipsInTimeline | ✅ | ✅ | ✅ | Returns array of TimelineItem IDs in the group |
+| GetPreClipNodeGraph | ✅ | ✅ | ✅ | Returns valid Graph object for manipulation |
+| GetPostClipNodeGraph | ✅ | ✅ | ✅ | |
 
 ## TimelineItem Testing Requirements
 
@@ -530,11 +530,24 @@ The next area of focus should be completing the implementation of the remaining 
 | TimelineItem | 61 | 61 | 100% | 61 | 100% |
 | Gallery | 8 | 8 | 100% | 0 | 0% |
 | GalleryStillAlbum | 6 | 6 | 100% | 0 | 0% |
-| Graph | 11 | 11 | 100% | 0 | 0% |
-| ColorGroup | 5 | 5 | 100% | 0 | 0% |
-| **TOTAL** | **291** | **294** | **99%** | **217** | **74%** |
+| Graph | 11 | 11 | 100% | 11 | 100% |
+| ColorGroup | 5 | 5 | 100% | 5 | 100% |
+| **TOTAL** | **291** | **294** | **99%** | **233** | **79%** |
 
-Overall, we've now implemented 291 out of 294 functions (99%), with 217 of those functions tested (74% of total functions). The only remaining implementation gap is related to 3 Resolve functions for accessing internal components, which are not needed for our MCP implementation.
+Overall, we've now implemented 291 out of 294 functions (99%), with 233 of those functions tested (79% of total functions). The only remaining implementation gap is related to 3 Resolve functions for accessing internal components, which are not needed for our MCP implementation.
+
+- 291 out of 294 functions have been implemented (99%)
+- 233 out of 294 have been tested (79%) 
+- 176 out of 294 are working correctly (60%)
+- 57 tested functions have issues
+
+## Functions with Highest Priority
+
+These functions should be implemented first:
+
+- Timeline: Complete remaining track management and editing functions
+- TimelineItem: Complete remaining marker and editing functions
+- MediaPoolItem: Finish implementing metadata functions
 
 ## API Limitations and Workarounds
 
