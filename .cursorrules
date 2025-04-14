@@ -1,0 +1,23 @@
+# DaVinci Resolve MCP Development Rules
+
+# API implementation workflow rules
+- When implementing a new API function, update API_IMPLEMENTATION_TRACKING.md with status
+- All component functions should use the safe_api_call pattern for consistent error handling
+- Functions with dependencies should have appropriate error messages when dependencies fail
+
+# Code organization
+- All component code goes in src/components/{component_name}
+- Tool registrations go in src/tools/registration.py
+- Common utilities go in src/resolve_api.py
+
+# Testing workflow
+- Update the API_IMPLEMENTATION_TRACKING.md with test results
+- Mark functions as working only after actual testing
+- Note particular issues with functions in the notes column
+- Update overall implementation percentages when adding new functions
+
+# PR requirements
+- Include updates to API_IMPLEMENTATION_TRACKING.md
+- Ensure all new functions are registered in the tools registry
+- Include test results for newly implemented functions
+- Update the High Priority Functions section based on recent implementations 

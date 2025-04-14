@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "davinci-resolve": {
+      "command": "/bin/bash",
+      "args": ["/Users/samuelgursky/davinci-resolve-mcp-20250413-05/scripts/run_mcp_server.sh"]
+    }
+  }
+}
