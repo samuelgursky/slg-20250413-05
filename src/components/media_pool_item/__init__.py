@@ -235,9 +235,8 @@ def add_marker(clip_id: str, frame_id: float, color: str, name: str, note: str,
         if not clip:
             raise RuntimeError(f"Failed to find clip with ID: {clip_id}")
             
-        # Add the marker
-        custom_data = custom_data or ""
-        result = clip.AddMarker(frame_id, color, name, note, duration, custom_data)
+        # Add the marker with custom data
+        result = clip.AddMarker(frame_id, color, name, note, duration, custom_data or "")
         if not result:
             raise RuntimeError("Failed to add marker")
             

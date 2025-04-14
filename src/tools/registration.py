@@ -172,6 +172,134 @@ from ..components.media_pool_item import (
     clear_mark_in_out
 )
 
+# Import Timeline component functions
+from ..components.timeline import (
+    get_timeline_details,
+    get_timeline_tracks,
+    get_timeline_items,
+    get_current_video_item,
+    get_timeline_items_in_range,
+    add_track,
+    delete_track,
+    delete_timeline_clips,
+    set_current_timecode,
+    set_track_enable,
+    set_track_lock,
+    add_marker,
+    get_markers,
+    get_marker_by_custom_data,
+    update_marker_custom_data,
+    get_marker_custom_data,
+    delete_markers_by_color,
+    delete_marker_at_frame,
+    delete_marker_by_custom_data,
+    set_name,
+    get_track_name,
+    set_track_name,
+    create_compound_clip,
+    get_current_timecode,
+    duplicate_timeline,
+    export_timeline,
+    get_timeline_setting,
+    set_timeline_setting,
+    insert_generator_into_timeline,
+    insert_fusion_generator_into_timeline,
+    insert_fusion_composition_into_timeline,
+    insert_ofx_generator_into_timeline,
+    insert_title_into_timeline,
+    insert_fusion_title_into_timeline,
+    grab_still,
+    grab_all_stills,
+    # New functions
+    set_start_timecode,
+    set_clips_linked,
+    get_current_video_item,
+    get_current_clip_thumbnail_image,
+    create_fusion_clip,
+    import_into_timeline,
+    get_timeline_items_in_range
+)
+
+# Import the timeline_item component functions
+from ..components.timeline_item import (
+    get_timeline_item,
+    get_duration,
+    get_start,
+    get_end,
+    get_left_offset,
+    get_right_offset,
+    get_source_start_frame,
+    get_source_end_frame,
+    get_source_start_time,
+    get_source_end_time,
+    get_property,
+    set_property,
+    set_start,
+    set_end,
+    set_left_offset,
+    set_right_offset,
+    add_flag,
+    get_flags,
+    clear_flags,
+    get_clip_color,
+    set_clip_color,
+    clear_clip_color,
+    add_fusion_comp,
+    rename_fusion_comp,
+    get_scale,
+    get_is_filler,
+    has_video_effect,
+    has_audio_effect,
+    has_video_effect_at_offset,
+    has_audio_effect_at_offset,
+    add_take,
+    get_selected_take_index,
+    get_takes_count,
+    get_take_by_index,
+    delete_take_by_index,
+    select_take_by_index,
+    finalize_take,
+    set_clip_enabled,
+    get_clip_enabled,
+    update_sidecar,
+    get_unique_id,
+    copy_grades
+)
+
+# Add import for Gallery component functions
+from ..components.gallery import (
+    get_album_name,
+    set_album_name,
+    get_current_still_album,
+    set_current_still_album,
+    get_gallery_still_albums,
+    get_gallery_power_grade_albums,
+    create_gallery_still_album,
+    create_gallery_power_grade_album
+)
+
+# Add import for GalleryStillAlbum component functions
+from ..components.gallery_still_album import (
+    get_stills,
+    get_label,
+    set_label,
+    import_stills,
+    export_stills,
+    delete_stills
+)
+from ..components.graph import (
+    get_num_nodes, set_lut, get_lut, set_node_cache_mode, get_node_cache_mode,
+    get_node_label, get_tools_in_node, set_node_enabled, apply_grade_from_drx,
+    apply_arri_cdl_lut, reset_all_grades
+)
+from ..components.color_group import (
+    get_name, set_name, get_clips_in_timeline, get_pre_clip_node_graph, get_post_clip_node_graph
+)
+from ..components.folder import (
+    get_clip_list, get_name, get_subfolder_list, get_is_folder_stale,
+    get_unique_id, export_folder, transcribe_audio, clear_transcription
+)
+
 logger = logging.getLogger("resolve_api.tools.registration")
 
 # Tool registry dictionary
@@ -1173,6 +1301,297 @@ TOOLS_REGISTRY = {
         ]
     },
 
+    # Timeline tools
+    "add_track": {
+        "name": "add_track",
+        "description": "Add a track to the current timeline",
+        "component": "timeline",
+        "function": add_track,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track to add ('video', 'audio', or 'subtitle')", "required": True}
+        ]
+    },
+    "delete_track": {
+        "name": "delete_track",
+        "description": "Delete a track from the current timeline",
+        "component": "timeline",
+        "function": delete_track,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track to delete ('video', 'audio', or 'subtitle')", "required": True},
+            {"name": "track_index", "type": "integer", "description": "Index of the track to delete (1-based index)", "required": True}
+        ]
+    },
+    "delete_timeline_clips": {
+        "name": "delete_timeline_clips",
+        "description": "Delete clips from the current timeline",
+        "component": "timeline",
+        "function": delete_timeline_clips,
+        "parameters": [
+            {"name": "clip_ids", "type": "array", "description": "List of timeline clip IDs to delete", "required": True}
+        ]
+    },
+    "set_current_timecode": {
+        "name": "set_current_timecode",
+        "description": "Set the current timecode for the timeline",
+        "component": "timeline",
+        "function": set_current_timecode,
+        "parameters": [
+            {"name": "timecode", "type": "string", "description": "Timecode string to set (format: HH:MM:SS:FF)", "required": True}
+        ]
+    },
+    "set_track_enable": {
+        "name": "set_track_enable",
+        "description": "Enable or disable a track in the timeline",
+        "component": "timeline",
+        "function": set_track_enable,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track ('video', 'audio', or 'subtitle')", "required": True},
+            {"name": "track_index", "type": "integer", "description": "Index of the track (1-based index)", "required": True},
+            {"name": "enable", "type": "boolean", "description": "True to enable the track, False to disable", "required": True}
+        ]
+    },
+    "set_track_lock": {
+        "name": "set_track_lock",
+        "description": "Lock or unlock a track in the timeline",
+        "component": "timeline",
+        "function": set_track_lock,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track ('video', 'audio', or 'subtitle')", "required": True},
+            {"name": "track_index", "type": "integer", "description": "Index of the track (1-based index)", "required": True},
+            {"name": "lock", "type": "boolean", "description": "True to lock the track, False to unlock", "required": True}
+        ]
+    },
+    "add_marker": {
+        "name": "add_marker",
+        "description": "Add a marker to the timeline",
+        "component": "timeline",
+        "function": add_marker,
+        "parameters": [
+            {"name": "frame_id", "type": "number", "description": "Frame position for the marker", "required": True},
+            {"name": "color", "type": "string", "description": "Color name for the marker", "required": True},
+            {"name": "name", "type": "string", "description": "Name of the marker", "required": True},
+            {"name": "note", "type": "string", "description": "Note text for the marker", "required": True},
+            {"name": "duration", "type": "number", "description": "Duration of the marker in frames", "required": True},
+            {"name": "custom_data", "type": "string", "description": "Custom data to attach to the marker", "required": False}
+        ]
+    },
+    "get_markers": {
+        "name": "get_markers",
+        "description": "Get all markers from the timeline",
+        "component": "timeline",
+        "function": get_markers,
+        "parameters": []
+    },
+    "get_marker_by_custom_data": {
+        "name": "get_marker_by_custom_data",
+        "description": "Get a marker by its custom data",
+        "component": "timeline",
+        "function": get_marker_by_custom_data,
+        "parameters": [
+            {"name": "custom_data", "type": "string", "description": "Custom data string to search for", "required": True}
+        ]
+    },
+    "update_marker_custom_data": {
+        "name": "update_marker_custom_data",
+        "description": "Update custom data for a marker at a specific frame",
+        "component": "timeline",
+        "function": update_marker_custom_data,
+        "parameters": [
+            {"name": "frame_id", "type": "number", "description": "Frame position of the marker", "required": True},
+            {"name": "custom_data", "type": "string", "description": "New custom data to set", "required": True}
+        ]
+    },
+    "get_marker_custom_data": {
+        "name": "get_marker_custom_data",
+        "description": "Get custom data for a marker at a specific frame",
+        "component": "timeline",
+        "function": get_marker_custom_data,
+        "parameters": [
+            {"name": "frame_id", "type": "number", "description": "Frame position of the marker", "required": True}
+        ]
+    },
+    "delete_markers_by_color": {
+        "name": "delete_markers_by_color",
+        "description": "Delete all markers of a specific color from the timeline",
+        "component": "timeline",
+        "function": delete_markers_by_color,
+        "parameters": [
+            {"name": "color", "type": "string", "description": "Color of markers to delete, or 'All' to delete all markers", "required": True}
+        ]
+    },
+    "delete_marker_at_frame": {
+        "name": "delete_marker_at_frame",
+        "description": "Delete a marker at a specific frame",
+        "component": "timeline",
+        "function": delete_marker_at_frame,
+        "parameters": [
+            {"name": "frame_num", "type": "number", "description": "Frame number where the marker is located", "required": True}
+        ]
+    },
+    "delete_marker_by_custom_data": {
+        "name": "delete_marker_by_custom_data",
+        "description": "Delete a marker by its custom data",
+        "component": "timeline",
+        "function": delete_marker_by_custom_data,
+        "parameters": [
+            {"name": "custom_data", "type": "string", "description": "Custom data string to search for", "required": True}
+        ]
+    },
+    "set_timeline_name": {
+        "name": "set_timeline_name",
+        "description": "Set the name of the current timeline",
+        "component": "timeline",
+        "function": set_name,
+        "parameters": [
+            {"name": "timeline_name", "type": "string", "description": "New name for the timeline", "required": True}
+        ]
+    },
+    "get_track_name": {
+        "name": "get_track_name",
+        "description": "Get the name of a track in the timeline",
+        "component": "timeline",
+        "function": get_track_name,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track ('video', 'audio', or 'subtitle')", "required": True},
+            {"name": "track_index", "type": "integer", "description": "Index of the track (1-based index)", "required": True}
+        ]
+    },
+    "set_track_name": {
+        "name": "set_track_name",
+        "description": "Set the name of a track in the timeline",
+        "component": "timeline",
+        "function": set_track_name,
+        "parameters": [
+            {"name": "track_type", "type": "string", "description": "Type of track ('video', 'audio', or 'subtitle')", "required": True},
+            {"name": "track_index", "type": "integer", "description": "Index of the track (1-based index)", "required": True},
+            {"name": "name", "type": "string", "description": "New name for the track", "required": True}
+        ]
+    },
+    "create_compound_clip": {
+        "name": "create_compound_clip",
+        "description": "Create a compound clip from timeline items",
+        "component": "timeline",
+        "function": create_compound_clip,
+        "parameters": [
+            {"name": "timeline_items", "type": "array", "description": "List of timeline item IDs to include in the compound clip", "required": True},
+            {"name": "clip_info", "type": "object", "description": "Optional dictionary with clip info (keys: 'startTimecode', 'name')", "required": False}
+        ]
+    },
+    "get_current_timecode": {
+        "name": "get_current_timecode",
+        "description": "Get the current timecode of the timeline",
+        "component": "timeline",
+        "function": get_current_timecode,
+        "parameters": []
+    },
+    "duplicate_timeline": {
+        "name": "duplicate_timeline",
+        "description": "Duplicate the current timeline with an optional new name",
+        "component": "timeline",
+        "function": duplicate_timeline,
+        "parameters": [
+            {"name": "timeline_name", "type": "string", "description": "Optional name for the duplicated timeline", "required": False}
+        ]
+    },
+    "export_timeline": {
+        "name": "export_timeline",
+        "description": "Export the current timeline to a file in the specified format",
+        "component": "timeline",
+        "function": export_timeline,
+        "parameters": [
+            {"name": "file_path", "type": "string", "description": "Path where the exported file will be saved", "required": True},
+            {"name": "export_type", "type": "string", "description": "Type of export (AAF, DRT, EDL, etc.)", "required": True},
+            {"name": "export_subtype", "type": "string", "description": "Subtype of export (optional, used for certain export types)", "required": False}
+        ]
+    },
+    "get_timeline_setting": {
+        "name": "get_timeline_setting",
+        "description": "Get the value of a timeline setting or all settings",
+        "component": "timeline",
+        "function": get_timeline_setting,
+        "parameters": [
+            {"name": "setting_name", "type": "string", "description": "Optional name of the setting to retrieve", "required": False}
+        ]
+    },
+    "set_timeline_setting": {
+        "name": "set_timeline_setting",
+        "description": "Set the value of a timeline setting",
+        "component": "timeline",
+        "function": set_timeline_setting,
+        "parameters": [
+            {"name": "setting_name", "type": "string", "description": "Name of the setting to set", "required": True},
+            {"name": "setting_value", "type": "string", "description": "Value to set for the setting", "required": True}
+        ]
+    },
+    "insert_generator_into_timeline": {
+        "name": "insert_generator_into_timeline",
+        "description": "Insert a generator into the current timeline",
+        "component": "timeline",
+        "function": insert_generator_into_timeline,
+        "parameters": [
+            {"name": "generator_name", "type": "string", "description": "Name of the generator to insert", "required": True}
+        ]
+    },
+    "insert_fusion_generator_into_timeline": {
+        "name": "insert_fusion_generator_into_timeline",
+        "description": "Insert a Fusion generator into the current timeline",
+        "component": "timeline",
+        "function": insert_fusion_generator_into_timeline,
+        "parameters": [
+            {"name": "generator_name", "type": "string", "description": "Name of the Fusion generator to insert", "required": True}
+        ]
+    },
+    "insert_fusion_composition_into_timeline": {
+        "name": "insert_fusion_composition_into_timeline",
+        "description": "Insert a Fusion composition into the current timeline",
+        "component": "timeline",
+        "function": insert_fusion_composition_into_timeline,
+        "parameters": []
+    },
+    "insert_ofx_generator_into_timeline": {
+        "name": "insert_ofx_generator_into_timeline",
+        "description": "Insert an OFX generator into the current timeline",
+        "component": "timeline",
+        "function": insert_ofx_generator_into_timeline,
+        "parameters": [
+            {"name": "generator_name", "type": "string", "description": "Name of the OFX generator to insert", "required": True}
+        ]
+    },
+    "insert_title_into_timeline": {
+        "name": "insert_title_into_timeline",
+        "description": "Insert a title into the current timeline",
+        "component": "timeline",
+        "function": insert_title_into_timeline,
+        "parameters": [
+            {"name": "title_name", "type": "string", "description": "Name of the title to insert", "required": True}
+        ]
+    },
+    "insert_fusion_title_into_timeline": {
+        "name": "insert_fusion_title_into_timeline",
+        "description": "Insert a Fusion title into the current timeline",
+        "component": "timeline",
+        "function": insert_fusion_title_into_timeline,
+        "parameters": [
+            {"name": "title_name", "type": "string", "description": "Name of the Fusion title to insert", "required": True}
+        ]
+    },
+    "grab_still": {
+        "name": "grab_still",
+        "description": "Grab a still from the current video clip in the timeline",
+        "component": "timeline",
+        "function": grab_still,
+        "parameters": []
+    },
+    "grab_all_stills": {
+        "name": "grab_all_stills",
+        "description": "Grab stills from all clips in the timeline at the specified source frame",
+        "component": "timeline",
+        "function": grab_all_stills,
+        "parameters": [
+            {"name": "still_frame_source", "type": "integer", "description": "Source frame for stills (1 - First frame, 2 - Middle frame)", "required": True}
+        ]
+    },
+
     # MediaPoolItem tools
     "get_media_pool_item_name": {
         "name": "get_media_pool_item_name",
@@ -1492,24 +1911,956 @@ TOOLS_REGISTRY = {
             {"name": "clip_id", "type": "string", "description": "ID of the media pool item", "required": True},
             {"name": "mark_type", "type": "string", "description": "Type of mark in/out to clear ('video', 'audio', or 'all')", "required": False}
         ]
-    }
+    },
+
+    # Timeline Item Tools
+    "get_timeline_item": {
+        "description": "Retrieve a timeline item by its ID",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            }
+        },
+        "function": get_timeline_item
+    },
+    "set_property": {
+        "description": "Set a property on a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "property_key": {
+                "description": "Property key name",
+                "type": "string"
+            },
+            "property_value": {
+                "description": "Property value to set (can be string, number, boolean)",
+                "type": "string"
+            }
+        },
+        "function": set_property
+    },
+    "get_property": {
+        "description": "Get the value of a property from a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "property_key": {
+                "description": "Property key name",
+                "type": "string"
+            }
+        },
+        "function": get_property
+    },
+    "set_start": {
+        "description": "Set the start frame of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "frame_num": {
+                "description": "Frame number for the new start position",
+                "type": "integer"
+            }
+        },
+        "function": set_start
+    },
+    "set_end": {
+        "description": "Set the end frame of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "frame_num": {
+                "description": "Frame number for the new end position",
+                "type": "integer"
+            }
+        },
+        "function": set_end
+    },
+    "set_left_offset": {
+        "description": "Set the left offset of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "offset": {
+                "description": "New left offset value in frames",
+                "type": "integer"
+            }
+        },
+        "function": set_left_offset
+    },
+    "set_right_offset": {
+        "description": "Set the right offset of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "offset": {
+                "description": "New right offset value in frames",
+                "type": "integer"
+            }
+        },
+        "function": set_right_offset
+    },
+    "add_fusion_comp": {
+        "description": "Add a new Fusion composition to a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "comp_name": {
+                "description": "Name for the new Fusion composition",
+                "type": "string"
+            }
+        },
+        "function": add_fusion_comp
+    },
+    "rename_fusion_comp": {
+        "description": "Rename a Fusion composition in a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "Unique ID of the timeline item",
+                "type": "string"
+            },
+            "old_name": {
+                "description": "Current name of the Fusion composition",
+                "type": "string"
+            },
+            "new_name": {
+                "description": "New name for the Fusion composition",
+                "type": "string"
+            }
+        },
+        "function": rename_fusion_comp
+    },
+    "get_timeline_item_scale": {
+        "description": "Gets the scale (playback speed) of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            }
+        },
+        "function": get_scale
+    },
+    "get_timeline_item_is_filler": {
+        "description": "Checks if a timeline item is a filler item",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            }
+        },
+        "function": get_is_filler
+    },
+    "has_video_effect": {
+        "description": "Checks if a timeline item has a video effect",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            }
+        },
+        "function": has_video_effect
+    },
+    "has_audio_effect": {
+        "description": "Checks if a timeline item has an audio effect",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            }
+        },
+        "function": has_audio_effect
+    },
+    "has_video_effect_at_offset": {
+        "description": "Checks if a timeline item has a video effect at a specific offset",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            },
+            "offset": {
+                "type": "number",
+                "description": "Offset in seconds",
+                "required": True
+            }
+        },
+        "function": has_video_effect_at_offset
+    },
+    "has_audio_effect_at_offset": {
+        "description": "Checks if a timeline item has an audio effect at a specific offset",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "ID of the timeline item",
+                "required": True
+            },
+            "offset": {
+                "type": "number",
+                "description": "Offset in seconds",
+                "required": True
+            }
+        },
+        "function": has_audio_effect_at_offset
+    },
+    "get_timeline_item_has_video_effect": {
+        "function": has_video_effect,
+        "description": "Check if a timeline item has a video effect applied.",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "The ID of the timeline item to check.",
+                "required": True
+            }
+        }
+    },
+    "get_timeline_item_has_audio_effect": {
+        "function": has_audio_effect,
+        "description": "Check if a timeline item has an audio effect applied.",
+        "parameters": {
+            "timeline_item_id": {
+                "type": "string",
+                "description": "The ID of the timeline item to check.",
+                "required": True
+            }
+        }
+    },
+    "get_timeline_item_flag_list": {
+        "description": "Get flags assigned to a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string"
+            }
+        },
+        "function": get_flags
+    },
+    "add_timeline_item_take": {
+        "description": "Add a media pool item as a new take to a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            },
+            "media_pool_item_id": {
+                "description": "ID of the media pool item to add as a take",
+                "type": "string",
+                "required": True
+            },
+            "start_frame": {
+                "description": "Optional start frame to specify clip extents",
+                "type": "integer",
+                "required": False
+            },
+            "end_frame": {
+                "description": "Optional end frame to specify clip extents",
+                "type": "integer",
+                "required": False
+            }
+        },
+        "function": add_take
+    },
+    "get_timeline_item_selected_take_index": {
+        "description": "Get the index of the currently selected take",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": get_selected_take_index
+    },
+    "get_timeline_item_takes_count": {
+        "description": "Get the number of takes in a take selector",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": get_takes_count
+    },
+    "get_timeline_item_take_by_index": {
+        "description": "Get information about a take by its index",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            },
+            "take_index": {
+                "description": "Index of the take to retrieve (1-based index)",
+                "type": "integer",
+                "required": True
+            }
+        },
+        "function": get_take_by_index
+    },
+    "delete_timeline_item_take_by_index": {
+        "description": "Delete a take by its index",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            },
+            "take_index": {
+                "description": "Index of the take to delete (1-based index)",
+                "type": "integer",
+                "required": True
+            }
+        },
+        "function": delete_take_by_index
+    },
+    "select_timeline_item_take_by_index": {
+        "description": "Select a take by its index",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            },
+            "take_index": {
+                "description": "Index of the take to select (1-based index)",
+                "type": "integer",
+                "required": True
+            }
+        },
+        "function": select_take_by_index
+    },
+    "finalize_timeline_item_take": {
+        "description": "Finalize take selection for a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": finalize_take
+    },
+    "set_timeline_item_enabled": {
+        "description": "Enable or disable a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            },
+            "enabled": {
+                "description": "Boolean value to set clip enabled state",
+                "type": "boolean",
+                "required": True
+            }
+        },
+        "function": set_clip_enabled
+    },
+    "get_timeline_item_enabled": {
+        "description": "Get the enabled status of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": get_clip_enabled
+    },
+    "update_timeline_item_sidecar": {
+        "description": "Update sidecar file for BRAW clips or RMD file for R3D clips",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": update_sidecar
+    },
+    "get_timeline_item_unique_id": {
+        "description": "Get the unique ID of a timeline item",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the timeline item",
+                "type": "string",
+                "required": True
+            }
+        },
+        "function": get_unique_id
+    },
+    "copy_timeline_item_grades": {
+        "description": "Copy grades from one timeline item to others",
+        "parameters": {
+            "timeline_item_id": {
+                "description": "ID of the source timeline item",
+                "type": "string",
+                "required": True
+            },
+            "target_timeline_items": {
+                "description": "List of timeline item IDs to copy grades to",
+                "type": "array",
+                "required": True
+            }
+        },
+        "function": copy_grades
+    },
+    "set_start_timecode": {
+        "function": set_start_timecode,
+        "description": "Set the start timecode of the current timeline",
+        "parameters": {
+            "timecode": {
+                "type": "string",
+                "description": "The timecode to set as the start timecode (format: 'HH:MM:SS:FF')"
+            }
+        }
+    },
+    "set_clips_linked": {
+        "function": set_clips_linked,
+        "description": "Set clips to be linked or unlinked",
+        "parameters": {
+            "clip_ids": {
+                "type": "array",
+                "description": "List of timeline item IDs to link/unlink"
+            },
+            "linked": {
+                "type": "boolean",
+                "description": "Whether to link (True) or unlink (False) the clips"
+            }
+        }
+    },
+    "get_current_video_item": {
+        "name": "get_current_video_item",
+        "description": "Get the current video item at the playhead position (workaround for selection)",
+        "component": "timeline",
+        "function": get_current_video_item,
+        "parameters": []
+    },
+    "get_timeline_items_in_range": {
+        "name": "get_timeline_items_in_range",
+        "description": "Get all timeline items within a frame range (workaround for selection)",
+        "component": "timeline",
+        "function": get_timeline_items_in_range,
+        "parameters": [
+            {"name": "start_frame", "type": "integer", "description": "Start frame of the range (inclusive)", "required": False},
+            {"name": "end_frame", "type": "integer", "description": "End frame of the range (inclusive)", "required": False}
+        ]
+    },
+    "get_current_clip_thumbnail_image": {
+        "name": "get_current_clip_thumbnail_image",
+        "description": "Get a thumbnail image of the current clip at the playhead position",
+        "component": "timeline",
+        "function": get_current_clip_thumbnail_image,
+        "parameters": [
+            {"name": "width", "type": "integer", "description": "Width of the thumbnail in pixels (default: 320)", "required": False},
+            {"name": "height", "type": "integer", "description": "Height of the thumbnail in pixels (default: 180)", "required": False}
+        ]
+    },
+    "create_fusion_clip": {
+        "name": "create_fusion_clip",
+        "description": "Create a Fusion clip from the specified timeline items",
+        "component": "timeline",
+        "function": create_fusion_clip,
+        "parameters": [
+            {"name": "timeline_items", "type": "array", "description": "List of timeline item IDs to include in the Fusion clip", "required": True},
+            {"name": "clip_info", "type": "object", "description": "Optional dictionary with additional clip information (e.g., name)", "required": False}
+        ]
+    },
+    "import_into_timeline": {
+        "name": "import_into_timeline",
+        "description": "Import media or AAF/XML/EDL/etc. into the current timeline",
+        "component": "timeline",
+        "function": import_into_timeline,
+        "parameters": [
+            {"name": "file_path", "type": "string", "description": "Path to the file to import", "required": True},
+            {"name": "import_options", "type": "object", "description": "Optional dictionary with import options specific to the file type", "required": False}
+        ]
+    },
+
+    # Add Gallery component function entries
+    
+    "get_album_name": {
+        "function": get_album_name,
+        "description": "Get the name of a gallery album",
+        "parameters": {
+            "album_name": {
+                "type": "string",
+                "description": "Name of the album to get information about",
+                "required": True
+            }
+        }
+    },
+    
+    "set_album_name": {
+        "function": set_album_name,
+        "description": "Set the name of a gallery album",
+        "parameters": {
+            "album_name": {
+                "type": "string",
+                "description": "Current name of the album",
+                "required": True
+            },
+            "new_name": {
+                "type": "string",
+                "description": "New name for the album",
+                "required": True
+            }
+        }
+    },
+    
+    "get_current_still_album": {
+        "function": get_current_still_album,
+        "description": "Get information about the current still album",
+        "parameters": {}
+    },
+    
+    "set_current_still_album": {
+        "function": set_current_still_album,
+        "description": "Set the current still album",
+        "parameters": {
+            "album_name": {
+                "type": "string",
+                "description": "Name of the album to set as current",
+                "required": True
+            }
+        }
+    },
+    
+    "get_gallery_still_albums": {
+        "function": get_gallery_still_albums,
+        "description": "Get a list of all gallery still albums",
+        "parameters": {}
+    },
+    
+    "get_gallery_power_grade_albums": {
+        "function": get_gallery_power_grade_albums,
+        "description": "Get a list of all gallery power grade albums",
+        "parameters": {}
+    },
+    
+    "create_gallery_still_album": {
+        "function": create_gallery_still_album,
+        "description": "Create a new gallery still album",
+        "parameters": {
+            "album_name": {
+                "type": "string",
+                "description": "Name for the new album",
+                "required": True
+            }
+        }
+    },
+    
+    "create_gallery_power_grade_album": {
+        "function": create_gallery_power_grade_album,
+        "description": "Create a new gallery power grade album",
+        "parameters": {
+            "album_name": {
+                "type": "string",
+                "description": "Name for the new power grade album",
+                "required": True
+            }
+        }
+    },
+    
+    # Add entries to TOOLS_REGISTRY for GalleryStillAlbum component functions
+    "get_stills": {
+        "description": "Get all stills from a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"}
+        ]
+    },
+    "get_label": {
+        "description": "Get label for a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"}
+        ]
+    },
+    "set_label": {
+        "description": "Set label for a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"},
+            {"name": "label", "description": "New label for the album", "required": True, "type": "str"}
+        ]
+    },
+    "import_stills": {
+        "description": "Import stills into a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"},
+            {"name": "still_paths", "description": "List of paths to still files to import", "required": True, "type": "List[str]"}
+        ]
+    },
+    "export_stills": {
+        "description": "Export stills from a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"},
+            {"name": "still_indices", "description": "List of indices of stills to export", "required": True, "type": "List[int]"},
+            {"name": "export_dir", "description": "Directory to export stills to", "required": True, "type": "str"},
+            {"name": "file_prefix", "description": "Prefix for exported still filenames", "required": False, "type": "str"}
+        ]
+    },
+    "delete_stills": {
+        "description": "Delete stills from a gallery still album",
+        "parameters": [
+            {"name": "album_name", "description": "Name of the gallery still album", "required": True, "type": "str"},
+            {"name": "still_indices", "description": "List of indices of stills to delete", "required": True, "type": "List[int]"}
+        ]
+    },
+    
+    # Graph
+    "get_num_nodes": {
+        "function": get_num_nodes,
+        "description": "Get the number of nodes in the current node graph",
+        "parameters": {}
+    },
+    "set_lut": {
+        "function": set_lut,
+        "description": "Set LUT for a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            },
+            "lut_path": {
+                "type": "string",
+                "description": "Path to the LUT file",
+                "required": True
+            }
+        }
+    },
+    "get_lut": {
+        "function": get_lut,
+        "description": "Get LUT information for a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            }
+        }
+    },
+    "set_node_cache_mode": {
+        "function": set_node_cache_mode,
+        "description": "Set cache mode for a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            },
+            "cache_mode": {
+                "type": "string",
+                "description": "Cache mode to set ('auto', 'on', or 'off')",
+                "required": True
+            }
+        }
+    },
+    "get_node_cache_mode": {
+        "function": get_node_cache_mode,
+        "description": "Get cache mode for a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            }
+        }
+    },
+    "get_node_label": {
+        "function": get_node_label,
+        "description": "Get the label of a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            }
+        }
+    },
+    "get_tools_in_node": {
+        "function": get_tools_in_node,
+        "description": "Get the list of tools in a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            }
+        }
+    },
+    "set_node_enabled": {
+        "function": set_node_enabled,
+        "description": "Enable or disable a specific node in the current node graph",
+        "parameters": {
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node",
+                "required": True
+            },
+            "enabled": {
+                "type": "boolean",
+                "description": "Whether the node should be enabled",
+                "required": True
+            }
+        }
+    },
+    "apply_grade_from_drx": {
+        "function": apply_grade_from_drx,
+        "description": "Apply a grade from a DRX file to the current node graph",
+        "parameters": {
+            "drx_path": {
+                "type": "string",
+                "description": "Path to the DRX file",
+                "required": True
+            },
+            "node_index": {
+                "type": "integer",
+                "description": "Index of the node to apply the grade to",
+                "required": False
+            },
+            "still_offset": {
+                "type": "integer",
+                "description": "Still offset for the grade",
+                "required": False
+            }
+        }
+    },
+    "apply_arri_cdl_lut": {
+        "function": apply_arri_cdl_lut,
+        "description": "Apply an ARRI CDL LUT to the current node graph",
+        "parameters": {
+            "cdl_path": {
+                "type": "string",
+                "description": "Path to the CDL file",
+                "required": True
+            }
+        }
+    },
+    "reset_all_grades": {
+        "function": reset_all_grades,
+        "description": "Reset all grades in the current node graph",
+        "parameters": {}
+    },
+    
+    # ColorGroup tools
+    "get_color_group_name": {
+        "function": get_name,
+        "category": "ColorGroup",
+        "description": "Get the name of a color group",
+        "parameters": [
+            {
+                "name": "group_name",
+                "type": "str",
+                "description": "Name of the color group",
+                "required": True,
+            },
+        ],
+    },
+    "set_color_group_name": {
+        "function": set_name,
+        "category": "ColorGroup",
+        "description": "Set the name of a color group",
+        "parameters": [
+            {
+                "name": "group_name",
+                "type": "str",
+                "description": "Current name of the color group",
+                "required": True,
+            },
+            {
+                "name": "new_name",
+                "type": "str",
+                "description": "New name for the color group",
+                "required": True,
+            },
+        ],
+    },
+    "get_color_group_clips_in_timeline": {
+        "function": get_clips_in_timeline,
+        "category": "ColorGroup",
+        "description": "Get the clips in the timeline that belong to a color group",
+        "parameters": [
+            {
+                "name": "group_name",
+                "type": "str",
+                "description": "Name of the color group",
+                "required": True,
+            },
+        ],
+    },
+    "get_color_group_pre_clip_node_graph": {
+        "function": get_pre_clip_node_graph,
+        "category": "ColorGroup",
+        "description": "Get the pre-clip node graph of a color group",
+        "parameters": [
+            {
+                "name": "group_name",
+                "type": "str",
+                "description": "Name of the color group",
+                "required": True,
+            },
+        ],
+    },
+    "get_color_group_post_clip_node_graph": {
+        "function": get_post_clip_node_graph,
+        "category": "ColorGroup",
+        "description": "Get the post-clip node graph of a color group",
+        "parameters": [
+            {
+                "name": "group_name",
+                "type": "str",
+                "description": "Name of the color group",
+                "required": True,
+            },
+        ],
+    },
+    # Folder tools
+    "list_media_pool_items": {
+        "function": get_clip_list,
+        "category": "Folder",
+        "description": "Get the list of clips in a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "get_folder_name": {
+        "function": get_name,
+        "category": "Folder",
+        "description": "Get the name of a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "get_folder_subfolders": {
+        "function": get_subfolder_list,
+        "category": "Folder",
+        "description": "Get the list of subfolders in a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "get_is_folder_stale": {
+        "function": get_is_folder_stale,
+        "category": "Folder",
+        "description": "Check if a folder's content is stale and needs to be refreshed",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "get_folder_unique_id": {
+        "function": get_unique_id,
+        "category": "Folder",
+        "description": "Get the unique ID of a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "export_folder": {
+        "function": export_folder,
+        "category": "Folder",
+        "description": "Export a folder to a specified file path",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+            {
+                "name": "file_path",
+                "type": "str",
+                "description": "Path where the folder will be exported",
+                "required": True,
+            },
+        ],
+    },
+    "transcribe_folder_audio": {
+        "function": transcribe_audio,
+        "category": "Folder",
+        "description": "Transcribe audio content in a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
+    "clear_folder_transcription": {
+        "function": clear_transcription,
+        "category": "Folder",
+        "description": "Clear transcription data for a folder",
+        "parameters": [
+            {
+                "name": "folder_id",
+                "type": "str",
+                "description": "ID of the folder",
+                "required": True,
+            },
+        ],
+    },
 }
 
 def get_all_tools() -> List[Dict[str, Any]]:
     """
-    Get a list of all registered tools
+    Get all available tools
     
     Returns:
-        List of tools with their metadata
+        List of tools with their descriptions and parameters
     """
     tools = []
     
     for tool_id, tool_info in TOOLS_REGISTRY.items():
         tools.append({
-            "name": tool_info["name"],
-            "description": tool_info["description"],
-            "component": tool_info["component"],
-            "parameters": tool_info["parameters"]
+            "name": tool_id,  # Use the tool_id as the name
+            "description": tool_info.get("description", ""),
+            "component": "timeline_item",  # Add a default component
+            "parameters": tool_info.get("parameters", {})
         })
     
     return tools
@@ -1524,15 +2875,15 @@ def get_tools_by_component() -> Dict[str, List[Dict[str, Any]]]:
     tools_by_component = {}
     
     for tool_id, tool_info in TOOLS_REGISTRY.items():
-        component = tool_info["component"]
+        component = "timeline_item"  # Default component
         
         if component not in tools_by_component:
             tools_by_component[component] = []
             
         tools_by_component[component].append({
-            "name": tool_info["name"],
-            "description": tool_info["description"],
-            "parameters": tool_info["parameters"]
+            "name": tool_id,  # Use the tool_id as the name
+            "description": tool_info.get("description", ""),
+            "parameters": tool_info.get("parameters", {})
         })
     
     return tools_by_component

@@ -83,6 +83,16 @@ def main():
     try:
         # Import and run the server
         from src.davinci_resolve_mcp import run_server
+        
+        # Test connection to Resolve (but continue even if it fails)
+        from src.resolve_api import get_resolve
+        resolve = get_resolve()
+        if not resolve:
+            logger.warning("Could not connect to DaVinci Resolve. The server will start, but operations will fail until Resolve is running.")
+        else:
+            logger.info("Successfully connected to DaVinci Resolve.")
+        
+        # Run the server regardless
         run_server()
     except ImportError as e:
         logger.error(f"Error importing server module: {str(e)}")

@@ -137,6 +137,44 @@ def get_current_project() -> Any:
         logger.error(f"Error getting current project: {str(e)}")
         return None
 
+def get_current_timeline() -> Optional[Any]:
+    """
+    Get the current timeline from the current project
+    
+    Returns:
+        The current timeline or None if not available
+    """
+    project = get_current_project()
+    if not project:
+        logger.error("No project is currently open")
+        return None
+        
+    timeline = project.GetCurrentTimeline()
+    if not timeline:
+        logger.error("No timeline is currently open")
+        return None
+        
+    return timeline
+
+def get_current_media_pool() -> Optional[Any]:
+    """
+    Get the media pool from the current project
+    
+    Returns:
+        The media pool or None if not available
+    """
+    project = get_current_project()
+    if not project:
+        logger.error("No project is currently open")
+        return None
+        
+    media_pool = project.GetMediaPool()
+    if not media_pool:
+        logger.error("Failed to get media pool")
+        return None
+        
+    return media_pool
+
 def safe_api_call(func: Callable[[], T], error_message: str) -> Dict[str, Any]:
     """
     Safely call a function and handle exceptions

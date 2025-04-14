@@ -240,11 +240,16 @@ def run_server():
     """Run the MCP server"""
     logger.info("Starting DaVinci Resolve MCP Server...")
     
-    # Debug the tool registration system
-    new_tools = get_all_tools()
-    logger.info(f"Found {len(new_tools)} new tools from registration system")
-    for tool in new_tools:
-        logger.info(f"Tool: {tool['name']} - {tool['component']}")
+    # Test connection to Resolve but continue anyway
+    try:
+        # Debug the tool registration system
+        new_tools = get_all_tools()
+        logger.info(f"Found {len(new_tools)} new tools from registration system")
+        for tool in new_tools:
+            logger.info(f"Tool: {tool['name']} - {tool['component']}")
+    except Exception as e:
+        logger.warning(f"Error loading tools: {str(e)}")
+        logger.warning("The server will start, but tools may not be available until DaVinci Resolve is running.")
     
     try:
         # Run the MCP server
