@@ -534,7 +534,7 @@ TOOLS_REGISTRY = {
         "component": "project_manager",
         "function": restore_project,
         "parameters": [
-            {"name": "backup_path", "type": "string", "description": "Path to the backup file", "required": True},
+            {"name": "file_path", "type": "string", "description": "Path to the backup file", "required": True},
             {"name": "project_name", "type": "string", "description": "Name for the restored project", "required": False}
         ]
     },
@@ -567,8 +567,7 @@ TOOLS_REGISTRY = {
         "component": "project_manager",
         "function": create_cloud_project,
         "parameters": [
-            {"name": "project_name", "type": "string", "description": "Name for the new cloud project", "required": True},
-            {"name": "location_path", "type": "string", "description": "Cloud location path", "required": True}
+            {"name": "cloud_settings", "type": "object", "description": "Cloud settings dictionary with project_name, project_media_path, and optional parameters", "required": True}
         ]
     },
     "load_cloud_project": {
@@ -577,8 +576,7 @@ TOOLS_REGISTRY = {
         "component": "project_manager",
         "function": load_cloud_project,
         "parameters": [
-            {"name": "project_name", "type": "string", "description": "Name of the cloud project to load", "required": True},
-            {"name": "location_path", "type": "string", "description": "Cloud location path", "required": True}
+            {"name": "cloud_settings", "type": "object", "description": "Cloud settings dictionary with project_name, project_media_path, and optional parameters", "required": True}
         ]
     },
     "import_cloud_project": {
@@ -587,9 +585,8 @@ TOOLS_REGISTRY = {
         "component": "project_manager",
         "function": import_cloud_project,
         "parameters": [
-            {"name": "project_name", "type": "string", "description": "Name of the cloud project to import", "required": True},
-            {"name": "location_path", "type": "string", "description": "Cloud location path", "required": True},
-            {"name": "local_folder_path", "type": "string", "description": "Local folder path", "required": True}
+            {"name": "file_path", "type": "string", "description": "Path to the project file to import", "required": True},
+            {"name": "cloud_settings", "type": "object", "description": "Cloud settings dictionary with project_name, project_media_path, and optional parameters", "required": True}
         ]
     },
     "restore_cloud_project": {
@@ -598,8 +595,8 @@ TOOLS_REGISTRY = {
         "component": "project_manager",
         "function": restore_cloud_project,
         "parameters": [
-            {"name": "backup_id", "type": "string", "description": "ID of the backup to restore", "required": True},
-            {"name": "location_path", "type": "string", "description": "Cloud location path", "required": True}
+            {"name": "folder_path", "type": "string", "description": "Path to the folder containing the project archive", "required": True},
+            {"name": "cloud_settings", "type": "object", "description": "Cloud settings dictionary with project_name, project_media_path, and optional parameters", "required": True}
         ]
     },
 

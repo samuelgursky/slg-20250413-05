@@ -240,6 +240,18 @@ def run_server():
     """Run the MCP server"""
     logger.info("Starting DaVinci Resolve MCP Server...")
     
+    # Validate tool parameter registrations
+    try:
+        from tools.startup_validation import validate_tools_on_startup
+        validation_passed = validate_tools_on_startup(strict=False)
+        if validation_passed:
+            logger.info("Tool validation passed: All tool registrations match function signatures")
+        else:
+            logger.warning("Tool validation found parameter mismatches. Some tools may not work correctly.")
+            logger.warning("Run the parameter validation script to fix these issues.")
+    except Exception as e:
+        logger.warning(f"Error running tool validation: {str(e)}")
+    
     # Test connection to Resolve but continue anyway
     try:
         # Debug the tool registration system
